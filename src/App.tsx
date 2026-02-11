@@ -6,8 +6,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { TradeProvider } from "@/context/TradeContext";
 import { AppNav } from "@/components/AppNav";
 import Index from "./pages/Index";
-import Analytics from "./pages/Analytics";
 import TradesDB from "./pages/TradesDB";
+import TradingPlan from "./pages/TradingPlan";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -23,8 +23,8 @@ const App = () => (
             <AppNav />
             <Routes>
               <Route path="/" element={<Index />} />
-              <Route path="/analytics" element={<Analytics />} />
               <Route path="/trades" element={<TradesDB />} />
+              <Route path="/plan" element={<TradingPlan />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </div>

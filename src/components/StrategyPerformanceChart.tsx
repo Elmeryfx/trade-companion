@@ -7,7 +7,7 @@ export const StrategyPerformanceChart = ({ trades }: { trades: Trade[] }) => {
 
   return (
     <div className="rounded-lg border border-border p-4">
-      <h4 className="text-sm text-muted-foreground mb-4 text-center">Performance by Model</h4>
+      <h4 className="text-sm text-muted-foreground mb-4 text-center">Performance by Strategy</h4>
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={data} layout="vertical">
           <XAxis type="number" tick={{ fill: "hsl(220,10%,55%)", fontSize: 11 }} axisLine={false} tickLine={false} />
