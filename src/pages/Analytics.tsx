@@ -3,6 +3,7 @@ import { StatsCards } from "@/components/StatsCards";
 import { AccountGrowthChart } from "@/components/AccountGrowthChart";
 import { StrategyPerformanceChart } from "@/components/StrategyPerformanceChart";
 import { RiskCards } from "@/components/RiskCards";
+import { MonthlySummary } from "@/components/MonthlySummary";
 
 const Analytics = () => {
   const { trades } = useTrades();
@@ -16,6 +17,7 @@ const Analytics = () => {
         <StrategyPerformanceChart trades={trades} />
       </div>
       <RiskCards trades={trades} />
+      <MonthlySummary trades={trades} />
     </div>
   );
 };
