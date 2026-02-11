@@ -7,6 +7,7 @@ export const AppNav = () => {
   const links = [
     { to: "/", label: "ANALYTICS", icon: BarChart3 },
     { to: "/trades", label: "TRADES DB", icon: Database },
+    { to: "/plan", label: "TRADING PLAN", icon: ClipboardList },
   ];
 
   return (
