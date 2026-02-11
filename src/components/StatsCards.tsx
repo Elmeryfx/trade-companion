@@ -1,17 +1,16 @@
 import { Trade } from "@/types/trade";
-import { getWinRate, getTotalPnl, getReturns, getProfitFactor, formatCurrency } from "@/lib/analytics";
-import { Target, DollarSign, TrendingUp, ArrowUpDown } from "lucide-react";
+import { getWinRate, getTotalPnl, getReturns, formatCurrency } from "@/lib/analytics";
+import { Target, DollarSign, TrendingUp } from "lucide-react";
 
 export const StatsCards = ({ trades }: { trades: Trade[] }) => {
   const stats = [
     { label: "Win Rate", value: `${getWinRate(trades).toFixed(1)}%`, icon: Target },
     { label: "Total P&L", value: formatCurrency(getTotalPnl(trades)), icon: DollarSign, colored: true },
     { label: "Returns", value: `${getReturns(trades)}%`, icon: TrendingUp },
-    { label: "Profit Factor", value: getProfitFactor(trades).toFixed(2), icon: ArrowUpDown },
   ];
 
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
       {stats.map((s) => (
         <div key={s.label} className="rounded-lg border border-border p-4 flex justify-between items-start">
           <div>

@@ -15,6 +15,7 @@ export interface Trade {
   date: string;
   setupImage?: string;
   resultImage?: string;
+  notes?: string;
 }
 
 export interface DayData {

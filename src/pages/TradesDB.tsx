@@ -1,6 +1,6 @@
 import { useTrades } from "@/context/TradeContext";
-import { useState } from "react";
-import { Trash2 } from "lucide-react";
+import { useState, useRef } from "react";
+import { Trash2, Download, Upload } from "lucide-react";
 
 type Filter = "all" | "win" | "lose";
 
@@ -10,8 +10,9 @@ const formatDate = (dateStr: string) => {
 };
 
 const TradesDB = () => {
-  const { trades, deleteTrade } = useTrades();
+  const { trades, deleteTrade, exportTrades, importTrades } = useTrades();
   const [filter, setFilter] = useState<Filter>("all");
+  const fileRef = useRef<HTMLInputElement>(null);
 
   const filtered = [...trades].reverse().filter((t) => {
     if (filter === "win") return t.result === "WIN";
@@ -25,9 +26,26 @@ const TradesDB = () => {
     { label: "Lose", value: "lose" },
   ];
 
+  const handleImport = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) importTrades(file);
+    if (fileRef.current) fileRef.current.value = "";
+  };
+
   return (
     <div className="p-6 space-y-6">
-      <h2 className="text-2xl font-bold text-primary">TRADES DB</h2>
+      <div className="flex items-center justify-between">
+        <h2 className="text-2xl font-bold text-primary">TRADES DB</h2>
+        <div className="flex gap-2">
+          <button onClick={exportTrades} className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium border border-border text-muted-foreground hover:text-foreground transition-colors">
+            <Download className="h-4 w-4" /> Export
+          </button>
+          <button onClick={() => fileRef.current?.click()} className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium border border-border text-muted-foreground hover:text-foreground transition-colors">
+            <Upload className="h-4 w-4" /> Import
+          </button>
+          <input ref={fileRef} type="file" accept=".json" className="hidden" onChange={handleImport} />
+        </div>
+      </div>
 
       <div className="flex gap-2">
         {filters.map((f) => (
@@ -61,6 +79,7 @@ const TradesDB = () => {
                 <th className="p-3 text-left text-muted-foreground font-medium">TP1</th>
                 <th className="p-3 text-left text-muted-foreground font-medium">Result</th>
                 <th className="p-3 text-left text-muted-foreground font-medium">Market</th>
+                <th className="p-3 text-left text-muted-foreground font-medium">Notes</th>
                 <th className="p-3 text-left text-muted-foreground font-medium">Setup</th>
                 <th className="p-3 text-left text-muted-foreground font-medium">Result Img</th>
                 <th className="p-3"></th>
@@ -84,6 +103,7 @@ const TradesDB = () => {
                     </span>
                   </td>
                   <td className="p-3 text-muted-foreground">{t.marketCondition}</td>
+                  <td className="p-3 text-muted-foreground max-w-[150px] truncate" title={t.notes}>{t.notes || "—"}</td>
                   <td className="p-3">
                     {t.setupImage ? <img src={t.setupImage} alt="setup" className="w-10 h-10 rounded object-cover" /> : "—"}
                   </td>

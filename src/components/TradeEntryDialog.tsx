@@ -21,6 +21,7 @@ export const TradeEntryDialog = () => {
   const [strategy, setStrategy] = useState<Strategy>("FVG");
   const [setupImage, setSetupImage] = useState<string>("");
   const [resultImage, setResultImage] = useState<string>("");
+  const [notes, setNotes] = useState("");
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>, setter: (v: string) => void) => {
     const file = e.target.files?.[0];
@@ -44,9 +45,10 @@ export const TradeEntryDialog = () => {
       date: new Date().toISOString().split("T")[0],
       setupImage,
       resultImage,
+      notes: notes || undefined,
     });
     setOpen(false);
-    setRr(""); setPnl(""); setTp1(false); setSetupImage(""); setResultImage("");
+    setRr(""); setPnl(""); setTp1(false); setSetupImage(""); setResultImage(""); setNotes("");
   };
 
   return (
@@ -128,6 +130,15 @@ export const TradeEntryDialog = () => {
           <div>
             <Label>Result Image (After)</Label>
             <Input type="file" accept="image/*" onChange={(e) => handleImageUpload(e, setResultImage)} className="cursor-pointer" />
+          </div>
+          <div>
+            <Label>Notes</Label>
+            <textarea
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              placeholder="Catatan tentang trade ini..."
+              className="flex min-h-[60px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            />
           </div>
           <Button onClick={handleSubmit} className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
             Submit Trade

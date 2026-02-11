@@ -5,6 +5,8 @@ interface TradeContextType {
   trades: Trade[];
   addTrade: (trade: Omit<Trade, "id">) => void;
   deleteTrade: (id: string) => void;
+  exportTrades: () => void;
+  importTrades: (file: File) => void;
 }
 
 const TradeContext = createContext<TradeContextType | undefined>(undefined);
@@ -27,8 +29,29 @@ export const TradeProvider = ({ children }: { children: ReactNode }) => {
     setTrades((prev) => prev.filter((t) => t.id !== id));
   };
 
+  const exportTrades = () => {
+    const blob = new Blob([JSON.stringify(trades, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `trades-${new Date().toISOString().split("T")[0]}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const importTrades = (file: File) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const imported = JSON.parse(e.target?.result as string) as Trade[];
+        setTrades((prev) => [...prev, ...imported]);
+      } catch { /* invalid file */ }
+    };
+    reader.readAsText(file);
+  };
+
   return (
-    <TradeContext.Provider value={{ trades, addTrade, deleteTrade }}>
+    <TradeContext.Provider value={{ trades, addTrade, deleteTrade, exportTrades, importTrades }}>
       {children}
     </TradeContext.Provider>
   );
