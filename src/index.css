@@ -56,5 +56,8 @@
   body {
     @apply bg-background text-foreground;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background-image: radial-gradient(ellipse at 20% 50%, hsl(275 39% 15% / 0.4) 0%, transparent 60%),
+                      radial-gradient(ellipse at 80% 20%, hsl(275 30% 12% / 0.3) 0%, transparent 50%);
+    background-attachment: fixed;
   }
 }
