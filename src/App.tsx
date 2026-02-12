@@ -9,6 +9,7 @@ import Index from "./pages/Index";
 import Analytics from "./pages/Analytics";
 import TradesDB from "./pages/TradesDB";
 import TradingPlan from "./pages/TradingPlan";
+import About from "./pages/About";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -27,6 +28,7 @@ const App = () => (
               <Route path="/analytics" element={<Analytics />} />
               <Route path="/trades" element={<TradesDB />} />
               <Route path="/plan" element={<TradingPlan />} />
+              <Route path="/about" element={<About />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </div>

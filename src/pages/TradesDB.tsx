@@ -95,7 +95,7 @@ const TradesDB = () => {
                   </td>
                   <td className="p-3">{t.rr}</td>
                   <td className="p-3">{t.strategy}</td>
-                  <td className={`p-3 font-medium ${t.pnl >= 0 ? "text-profit" : "text-loss"}`}>€{t.pnl.toFixed(2)}</td>
+                  <td className={`p-3 font-medium ${t.pnl >= 0 ? "text-profit" : "text-loss"}`}>${t.pnl.toFixed(2)}</td>
                   <td className="p-3">{t.tp1Hit ? "✓" : "—"}</td>
                   <td className="p-3">
                     <span className={`px-2 py-0.5 rounded text-xs font-medium ${t.result === "WIN" ? "bg-primary/20 text-profit" : "bg-destructive/20 text-loss"}`}>

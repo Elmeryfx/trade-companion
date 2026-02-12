@@ -17,7 +17,7 @@ export const RiskAnalysis = ({ trades }: { trades: Trade[] }) => {
 
   // Drawdown calc
   const sorted = [...trades].sort((a, b) => a.date.localeCompare(b.date));
-  let peak = 10000, balance = 10000;
+  let peak = 0, balance = 0;
   const ddData = sorted.map((t) => {
     balance += t.pnl;
     peak = Math.max(peak, balance);
@@ -27,13 +27,13 @@ export const RiskAnalysis = ({ trades }: { trades: Trade[] }) => {
   const maxDrawdown = ddData.length ? Math.min(...ddData.map((d) => d.drawdown)) : 0;
 
   const cards = [
-    { label: "Biggest Winner", value: `€${biggestWinner.toFixed(2)}`, icon: TrendingUp, color: "text-profit" },
-    { label: "Biggest Loser", value: `€${biggestLoser.toFixed(2)}`, icon: TrendingDown, color: "text-loss" },
+    { label: "Biggest Winner", value: `$${biggestWinner.toFixed(2)}`, icon: TrendingUp, color: "text-profit" },
+    { label: "Biggest Loser", value: `$${biggestLoser.toFixed(2)}`, icon: TrendingDown, color: "text-loss" },
   ];
 
   const sideCards = [
-    { label: "Avg Win", value: `€${avgWin.toFixed(2)}`, icon: TrendingUp, color: "text-profit" },
-    { label: "Avg Loss", value: `€${avgLoss.toFixed(2)}`, icon: TrendingDown, color: "text-loss" },
+    { label: "Avg Win", value: `$${avgWin.toFixed(2)}`, icon: TrendingUp, color: "text-profit" },
+    { label: "Avg Loss", value: `$${avgLoss.toFixed(2)}`, icon: TrendingDown, color: "text-loss" },
     { label: "Risk/Reward", value: avgRR.toFixed(2), icon: ArrowUpDown, color: "text-primary" },
     { label: "Consistency Score", value: `${Math.abs(consistencyScore).toFixed(1)}%`, icon: Target, color: "text-primary" },
   ];
@@ -68,15 +68,15 @@ export const RiskAnalysis = ({ trades }: { trades: Trade[] }) => {
           <ResponsiveContainer width="100%" height={300}>
             <AreaChart data={ddData}>
               <defs>
-                <linearGradient id="ddGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="hsl(160,84%,39%)" stopOpacity={0.4} />
-                  <stop offset="95%" stopColor="hsl(160,84%,39%)" stopOpacity={0} />
+              <linearGradient id="ddGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="hsl(275,39%,53%)" stopOpacity={0.4} />
+                  <stop offset="95%" stopColor="hsl(275,39%,53%)" stopOpacity={0} />
                 </linearGradient>
               </defs>
-              <XAxis dataKey="date" tick={{ fill: "hsl(220,10%,55%)", fontSize: 11 }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fill: "hsl(220,10%,55%)", fontSize: 11 }} axisLine={false} tickLine={false} />
-              <Tooltip contentStyle={{ backgroundColor: "hsl(220,18%,10%)", border: "1px solid hsl(220,15%,18%)", borderRadius: 8 }} />
-              <Area type="monotone" dataKey="drawdown" stroke="hsl(160,84%,39%)" fill="url(#ddGrad)" strokeWidth={2} />
+              <XAxis dataKey="date" tick={{ fill: "hsl(270,10%,55%)", fontSize: 11 }} axisLine={false} tickLine={false} />
+              <YAxis tick={{ fill: "hsl(270,10%,55%)", fontSize: 11 }} axisLine={false} tickLine={false} />
+              <Tooltip contentStyle={{ backgroundColor: "hsl(272,18%,13%)", border: "1px solid hsl(275,25%,22%)", borderRadius: 8 }} />
+              <Area type="monotone" dataKey="drawdown" stroke="hsl(275,39%,53%)" fill="url(#ddGrad)" strokeWidth={2} />
             </AreaChart>
           </ResponsiveContainer>
         </div>

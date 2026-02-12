@@ -92,7 +92,7 @@ export const TradeEntryDialog = () => {
               <Input type="number" step="0.1" value={rr} onChange={(e) => setRr(e.target.value)} placeholder="e.g. 2.5" />
             </div>
             <div>
-              <Label>P&L (€)</Label>
+              <Label>P&L ($)</Label>
               <Input type="number" value={pnl} onChange={(e) => setPnl(e.target.value)} placeholder="e.g. 500 or -100" />
             </div>
           </div>

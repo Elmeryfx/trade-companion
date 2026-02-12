@@ -14,14 +14,9 @@ export const getProfitFactor = (trades: Trade[]) => {
   return losses === 0 ? wins : parseFloat((wins / losses).toFixed(2));
 };
 
-export const getReturns = (trades: Trade[], startingBalance = 10000) => {
-  const pnl = getTotalPnl(trades);
-  return parseFloat(((pnl / startingBalance) * 100).toFixed(1));
-};
-
 export const formatCurrency = (value: number) => {
-  if (Math.abs(value) >= 1000) return `€${(value / 1000).toFixed(1)}K`;
-  return `€${value.toFixed(0)}`;
+  if (Math.abs(value) >= 1000) return `$${(value / 1000).toFixed(1)}K`;
+  return `$${value.toFixed(0)}`;
 };
 
 export const getDailyPnl = (trades: Trade[]) => {
@@ -40,13 +35,12 @@ export const getStrategyPerformance = (trades: Trade[]) => {
   return Object.entries(map).map(([name, pnl]) => ({ name, pnl }));
 };
 
-export const getAccountGrowth = (trades: Trade[], startingBalance = 10000) => {
+export const getAccountGrowth = (trades: Trade[]) => {
   const sorted = [...trades].sort((a, b) => a.date.localeCompare(b.date));
-  let balance = startingBalance;
-  const data = [{ date: "Start", balance: startingBalance }];
-  sorted.forEach((t) => {
-    balance += t.pnl;
-    data.push({ date: t.date, balance });
+  let cumulative = 0;
+  const data = sorted.map((t) => {
+    cumulative += t.pnl;
+    return { date: t.date, balance: cumulative };
   });
   return data;
 };

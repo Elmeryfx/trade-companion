@@ -11,11 +11,11 @@ export const RiskCards = ({ trades }: { trades: Trade[] }) => {
   const avgRR = trades.length ? trades.reduce((s, t) => s + t.rr, 0) / trades.length : 0;
 
   const cards = [
-    { label: "Avg Win", value: `€${avgWin.toFixed(2)}`, icon: TrendingUp, color: "text-profit" },
-    { label: "Avg Loss", value: `€${avgLoss.toFixed(2)}`, icon: TrendingDown, color: "text-loss" },
+    { label: "Avg Win", value: `$${avgWin.toFixed(2)}`, icon: TrendingUp, color: "text-profit" },
+    { label: "Avg Loss", value: `$${avgLoss.toFixed(2)}`, icon: TrendingDown, color: "text-loss" },
     { label: "Risk/Reward", value: avgRR.toFixed(2), icon: ArrowUpDown, color: "text-primary" },
-    { label: "Biggest Winner", value: `€${biggestWinner.toFixed(2)}`, icon: TrendingUp, color: "text-profit" },
-    { label: "Biggest Loser", value: `€${biggestLoser.toFixed(2)}`, icon: TrendingDown, color: "text-loss" },
+    { label: "Biggest Winner", value: `$${biggestWinner.toFixed(2)}`, icon: TrendingUp, color: "text-profit" },
+    { label: "Biggest Loser", value: `$${biggestLoser.toFixed(2)}`, icon: TrendingDown, color: "text-loss" },
   ];
 
   return (
