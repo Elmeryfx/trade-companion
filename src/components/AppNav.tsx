@@ -24,7 +24,7 @@ export const AppNav = () => {
             <Link
               key={l.to}
               to={l.to}
-              className={`flex items-center gap-2 text-sm font-medium transition-colors ${
+              className={`flex items-center gap-2 text-sm font-medium transition-all duration-200 hover:scale-105 ${
                 pathname === l.to ? "text-primary" : "text-muted-foreground hover:text-foreground"
               }`}
             >
