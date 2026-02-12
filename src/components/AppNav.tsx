@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { BarChart3, ClipboardList, Database, TrendingUp, Info } from "lucide-react";
+import { BarChart3, Database, TrendingUp, Info } from "lucide-react";
 
 export const AppNav = () => {
   const { pathname } = useLocation();
@@ -8,7 +8,7 @@ export const AppNav = () => {
     { to: "/", label: "HOME", icon: TrendingUp },
     { to: "/analytics", label: "ANALYTICS", icon: BarChart3 },
     { to: "/trades", label: "TRADES DB", icon: Database },
-    { to: "/plan", label: "TRADING PLAN", icon: ClipboardList },
+    
     { to: "/about", label: "ABOUT", icon: Info },
   ];
 

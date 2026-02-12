@@ -87,15 +87,15 @@ export const TradeCalendar = ({ trades }: { trades: Trade[] }) => {
                 const data = key ? tradeMap[key] : null;
                 const bgClass = data ? (data.pnl >= 0 ? "bg-primary/20" : "bg-destructive/20") : "";
                 return (
-                  <div key={`${wi}-${di}`} className={`border border-border/50 p-2 min-h-[70px] ${bgClass}`}>
+                  <div key={`${wi}-${di}`} className={`border border-border/50 p-2 min-h-[70px] flex flex-col items-center justify-center ${bgClass}`}>
                     {d !== null && (
                       <>
                         <span className="text-xs text-muted-foreground">{d}</span>
                         {data && (
-                          <div className="text-center mt-2">
+                          <>
                             <div className={`text-sm font-medium ${data.pnl >= 0 ? "text-profit" : "text-loss"}`}>{data.count}</div>
-                            <div className={`text-xs ${data.pnl >= 0 ? "text-profit" : "text-loss"}`}>{data.pnl.toFixed(1)}</div>
-                          </div>
+                            <div className={`text-xs ${data.pnl >= 0 ? "text-profit" : "text-loss"}`}>${data.pnl.toFixed(1)}</div>
+                          </>
                         )}
                       </>
                     )}
