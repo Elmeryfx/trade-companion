@@ -10,12 +10,12 @@ export const StrategyPerformanceChart = ({ trades }: { trades: Trade[] }) => {
       <h4 className="text-sm text-muted-foreground mb-4 text-center">Performance by Strategy</h4>
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={data} layout="vertical">
-          <XAxis type="number" tick={{ fill: "hsl(220,10%,55%)", fontSize: 11 }} axisLine={false} tickLine={false} />
-          <YAxis dataKey="name" type="category" tick={{ fill: "hsl(220,10%,55%)", fontSize: 12 }} axisLine={false} tickLine={false} width={100} />
-          <Tooltip contentStyle={{ backgroundColor: "hsl(220,18%,10%)", border: "1px solid hsl(220,15%,18%)", borderRadius: 8 }} />
+          <XAxis type="number" tick={{ fill: "hsl(270,10%,55%)", fontSize: 11 }} axisLine={false} tickLine={false} />
+          <YAxis dataKey="name" type="category" tick={{ fill: "hsl(270,10%,55%)", fontSize: 12 }} axisLine={false} tickLine={false} width={100} />
+          <Tooltip contentStyle={{ backgroundColor: "hsl(272,18%,13%)", border: "1px solid hsl(275,25%,22%)", borderRadius: 8 }} />
           <Bar dataKey="pnl" radius={[0, 4, 4, 0]}>
             {data.map((entry, i) => (
-              <Cell key={i} fill={entry.pnl >= 0 ? "hsl(160,84%,39%)" : "hsl(0,72%,55%)"} />
+              <Cell key={i} fill={entry.pnl >= 0 ? "hsl(145,70%,45%)" : "hsl(0,72%,55%)"} />
             ))}
           </Bar>
         </BarChart>

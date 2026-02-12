@@ -20,10 +20,10 @@ export const PerformanceProfile = ({ trades }: { trades: Trade[] }) => {
       <h4 className="text-sm text-muted-foreground mb-2 text-center">Performance Profile</h4>
       <ResponsiveContainer width="100%" height={250}>
         <RadarChart data={data}>
-          <PolarGrid stroke="hsl(220,15%,18%)" />
-          <PolarAngleAxis dataKey="subject" tick={{ fill: "hsl(220,10%,55%)", fontSize: 11 }} />
-          <PolarRadiusAxis angle={90} domain={[0, 100]} tick={{ fill: "hsl(220,10%,55%)", fontSize: 10 }} />
-          <Radar dataKey="value" stroke="hsl(160,84%,39%)" fill="hsl(160,84%,39%)" fillOpacity={0.25} strokeWidth={2} />
+          <PolarGrid stroke="hsl(275,25%,22%)" />
+          <PolarAngleAxis dataKey="subject" tick={{ fill: "hsl(270,10%,55%)", fontSize: 11 }} />
+          <PolarRadiusAxis angle={90} domain={[0, 100]} tick={{ fill: "hsl(270,10%,55%)", fontSize: 10 }} />
+          <Radar dataKey="value" stroke="hsl(275,39%,53%)" fill="hsl(275,39%,53%)" fillOpacity={0.25} strokeWidth={2} />
         </RadarChart>
       </ResponsiveContainer>
     </div>
