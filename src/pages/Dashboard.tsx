@@ -11,7 +11,7 @@ const Dashboard = () => {
     <div className="p-6 space-y-6">
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-6">
         {/* Quick Actions */}
-        <div className="rounded-lg border border-border p-5">
+        <div className="rounded-lg border border-border p-5 transition-all duration-300 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5">
           <h3 className="font-bold text-foreground mb-4">Quick Actions</h3>
           <TradeEntryDialog />
         </div>

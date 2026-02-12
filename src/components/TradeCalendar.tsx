@@ -57,7 +57,7 @@ export const TradeCalendar = ({ trades }: { trades: Trade[] }) => {
   const dayNames = ["Mon", "Tue", "Wed", "Thu", "Fri"];
 
   return (
-    <div className="rounded-lg border border-border p-4">
+    <div className="rounded-lg border border-border p-4 transition-all duration-300 hover:border-primary/30">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">
           <button onClick={prev} className="text-muted-foreground hover:text-foreground"><ChevronLeft className="h-5 w-5" /></button>
@@ -87,15 +87,15 @@ export const TradeCalendar = ({ trades }: { trades: Trade[] }) => {
                 const data = key ? tradeMap[key] : null;
                 const bgClass = data ? (data.pnl >= 0 ? "bg-primary/20" : "bg-destructive/20") : "";
                 return (
-                  <div key={`${wi}-${di}`} className={`border border-border/50 p-2 min-h-[70px] flex flex-col items-center justify-center ${bgClass}`}>
+                  <div key={`${wi}-${di}`} className={`border border-border/50 p-2 min-h-[70px] transition-all duration-200 hover:scale-105 hover:z-10 hover:shadow-lg hover:shadow-primary/10 ${bgClass}`}>
                     {d !== null && (
                       <>
                         <span className="text-xs text-muted-foreground">{d}</span>
                         {data && (
-                          <>
+                          <div className="text-center mt-2">
                             <div className={`text-sm font-medium ${data.pnl >= 0 ? "text-profit" : "text-loss"}`}>{data.count}</div>
                             <div className={`text-xs ${data.pnl >= 0 ? "text-profit" : "text-loss"}`}>${data.pnl.toFixed(1)}</div>
-                          </>
+                          </div>
                         )}
                       </>
                     )}
