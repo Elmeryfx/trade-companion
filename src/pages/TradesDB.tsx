@@ -1,6 +1,13 @@
 import { useTrades } from "@/context/TradeContext";
 import { useState, useRef } from "react";
-import { Trash2, Download, Upload } from "lucide-react";
+import { Trash2, Download, Upload, Pencil } from "lucide-react";
+import { Trade } from "@/types/trade";
+import { ImagePreviewDialog } from "@/components/ImagePreviewDialog";
+import { TradeEditDialog } from "@/components/TradeEditDialog";
+import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
+  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 type Filter = "all" | "win" | "lose";
 
@@ -10,9 +17,12 @@ const formatDate = (dateStr: string) => {
 };
 
 const TradesDB = () => {
-  const { trades, deleteTrade, exportTrades, importTrades } = useTrades();
+  const { trades, deleteTrade, updateTrade, exportTrades, importTrades } = useTrades();
   const [filter, setFilter] = useState<Filter>("all");
   const fileRef = useRef<HTMLInputElement>(null);
+  const [previewImg, setPreviewImg] = useState<string | null>(null);
+  const [editTrade, setEditTrade] = useState<Trade | null>(null);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
 
   const filtered = [...trades].reverse().filter((t) => {
     if (filter === "win") return t.result === "WIN";
@@ -105,13 +115,20 @@ const TradesDB = () => {
                   <td className="p-3 text-muted-foreground">{t.marketCondition}</td>
                   <td className="p-3 text-muted-foreground max-w-[150px] truncate" title={t.notes}>{t.notes || "—"}</td>
                   <td className="p-3">
-                    {t.setupImage ? <img src={t.setupImage} alt="setup" className="w-10 h-10 rounded object-cover" /> : "—"}
+                    {t.setupImage ? (
+                      <img src={t.setupImage} alt="setup" className="w-10 h-10 rounded object-cover cursor-pointer hover:scale-110 transition-transform" onClick={() => setPreviewImg(t.setupImage!)} />
+                    ) : "—"}
                   </td>
                   <td className="p-3">
-                    {t.resultImage ? <img src={t.resultImage} alt="result" className="w-10 h-10 rounded object-cover" /> : "—"}
+                    {t.resultImage ? (
+                      <img src={t.resultImage} alt="result" className="w-10 h-10 rounded object-cover cursor-pointer hover:scale-110 transition-transform" onClick={() => setPreviewImg(t.resultImage!)} />
+                    ) : "—"}
                   </td>
-                  <td className="p-3">
-                    <button onClick={() => deleteTrade(t.id)} className="text-muted-foreground hover:text-loss">
+                  <td className="p-3 flex gap-1">
+                    <button onClick={() => setEditTrade(t)} className="text-muted-foreground hover:text-primary">
+                      <Pencil className="h-4 w-4" />
+                    </button>
+                    <button onClick={() => setDeleteId(t.id)} className="text-muted-foreground hover:text-loss">
                       <Trash2 className="h-4 w-4" />
                     </button>
                   </td>
@@ -121,6 +138,24 @@ const TradesDB = () => {
           </table>
         </div>
       )}
+
+      <ImagePreviewDialog src={previewImg} open={!!previewImg} onOpenChange={(o) => !o && setPreviewImg(null)} />
+      <TradeEditDialog trade={editTrade} open={!!editTrade} onOpenChange={(o) => !o && setEditTrade(null)} onSave={updateTrade} />
+
+      <AlertDialog open={!!deleteId} onOpenChange={(o) => !o && setDeleteId(null)}>
+        <AlertDialogContent className="bg-card border-border">
+          <AlertDialogHeader>
+            <AlertDialogTitle>Hapus Trade?</AlertDialogTitle>
+            <AlertDialogDescription>Trade yang dihapus tidak dapat dikembalikan.</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Batal</AlertDialogCancel>
+            <AlertDialogAction className="bg-destructive text-destructive-foreground hover:bg-destructive/90" onClick={() => { if (deleteId) deleteTrade(deleteId); setDeleteId(null); }}>
+              Hapus
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };

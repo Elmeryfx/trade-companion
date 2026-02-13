@@ -4,6 +4,7 @@ import { Trade } from "@/types/trade";
 interface TradeContextType {
   trades: Trade[];
   addTrade: (trade: Omit<Trade, "id">) => void;
+  updateTrade: (trade: Trade) => void;
   deleteTrade: (id: string) => void;
   exportTrades: () => void;
   importTrades: (file: File) => void;
@@ -23,6 +24,10 @@ export const TradeProvider = ({ children }: { children: ReactNode }) => {
 
   const addTrade = (trade: Omit<Trade, "id">) => {
     setTrades((prev) => [...prev, { ...trade, id: crypto.randomUUID() }]);
+  };
+
+  const updateTrade = (trade: Trade) => {
+    setTrades((prev) => prev.map((t) => (t.id === trade.id ? trade : t)));
   };
 
   const deleteTrade = (id: string) => {
@@ -51,7 +56,7 @@ export const TradeProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <TradeContext.Provider value={{ trades, addTrade, deleteTrade, exportTrades, importTrades }}>
+    <TradeContext.Provider value={{ trades, addTrade, updateTrade, deleteTrade, exportTrades, importTrades }}>
       {children}
     </TradeContext.Provider>
   );
