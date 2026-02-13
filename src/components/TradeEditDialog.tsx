@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Trade, Position, MarketCondition, TradeResult, Strategy } from "@/types/trade";
+import { ImagePlus } from "lucide-react";
 
 interface Props {
   trade: Trade | null;
@@ -17,6 +18,7 @@ interface Props {
 export const TradeEditDialog = ({ trade, open, onOpenChange, onSave }: Props) => {
   const [position, setPosition] = useState<Position>("BUY");
   const [rr, setRr] = useState("");
+  const [pips, setPips] = useState("");
   const [pnl, setPnl] = useState("");
   const [tp1, setTp1] = useState(false);
   const [market, setMarket] = useState<MarketCondition>("BULLISH");
@@ -24,11 +26,14 @@ export const TradeEditDialog = ({ trade, open, onOpenChange, onSave }: Props) =>
   const [strategy, setStrategy] = useState<Strategy>("FVG");
   const [notes, setNotes] = useState("");
   const [date, setDate] = useState("");
+  const [setupImage, setSetupImage] = useState("");
+  const [resultImage, setResultImage] = useState("");
 
   useEffect(() => {
     if (trade) {
       setPosition(trade.position);
       setRr(String(trade.rr));
+      setPips(String(trade.pips || 0));
       setPnl(String(trade.pnl));
       setTp1(trade.tp1Hit);
       setMarket(trade.marketCondition);
@@ -36,6 +41,8 @@ export const TradeEditDialog = ({ trade, open, onOpenChange, onSave }: Props) =>
       setStrategy(trade.strategy);
       setNotes(trade.notes || "");
       setDate(trade.date);
+      setSetupImage(trade.setupImage || "");
+      setResultImage(trade.resultImage || "");
     }
   }, [trade]);
 
@@ -45,6 +52,7 @@ export const TradeEditDialog = ({ trade, open, onOpenChange, onSave }: Props) =>
       ...trade,
       position,
       rr: parseFloat(rr),
+      pips: parseFloat(pips) || 0,
       pnl: parseFloat(pnl),
       tp1Hit: tp1,
       marketCondition: market,
@@ -52,6 +60,8 @@ export const TradeEditDialog = ({ trade, open, onOpenChange, onSave }: Props) =>
       strategy,
       notes: notes || undefined,
       date,
+      setupImage: setupImage || undefined,
+      resultImage: resultImage || undefined,
     });
     onOpenChange(false);
   };
@@ -89,10 +99,14 @@ export const TradeEditDialog = ({ trade, open, onOpenChange, onSave }: Props) =>
               </Select>
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-3 gap-4">
             <div>
               <Label>R:R</Label>
               <Input type="number" step="0.1" value={rr} onChange={(e) => setRr(e.target.value)} />
+            </div>
+            <div>
+              <Label>Pips</Label>
+              <Input type="number" step="0.1" value={pips} onChange={(e) => setPips(e.target.value)} />
             </div>
             <div>
               <Label>P&L ($)</Label>
@@ -125,6 +139,34 @@ export const TradeEditDialog = ({ trade, open, onOpenChange, onSave }: Props) =>
           <div className="flex items-center gap-2">
             <Checkbox checked={tp1} onCheckedChange={(c) => setTp1(!!c)} id="tp1-edit" />
             <Label htmlFor="tp1-edit">TP 1 Hit</Label>
+          </div>
+          <div>
+            <Label>Setup Image</Label>
+            <div className="flex items-center gap-2">
+              {setupImage && <img src={setupImage} alt="setup" className="w-12 h-12 rounded object-cover" />}
+              <label className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm border border-input cursor-pointer hover:bg-secondary/50 transition-colors">
+                <ImagePlus className="h-4 w-4" /> {setupImage ? "Change" : "Upload"}
+                <input type="file" accept="image/*" className="hidden" onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) { const r = new FileReader(); r.onload = () => setSetupImage(r.result as string); r.readAsDataURL(file); }
+                }} />
+              </label>
+              {setupImage && <button type="button" onClick={() => setSetupImage("")} className="text-xs text-muted-foreground hover:text-loss">Remove</button>}
+            </div>
+          </div>
+          <div>
+            <Label>Result Image</Label>
+            <div className="flex items-center gap-2">
+              {resultImage && <img src={resultImage} alt="result" className="w-12 h-12 rounded object-cover" />}
+              <label className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm border border-input cursor-pointer hover:bg-secondary/50 transition-colors">
+                <ImagePlus className="h-4 w-4" /> {resultImage ? "Change" : "Upload"}
+                <input type="file" accept="image/*" className="hidden" onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) { const r = new FileReader(); r.onload = () => setResultImage(r.result as string); r.readAsDataURL(file); }
+                }} />
+              </label>
+              {resultImage && <button type="button" onClick={() => setResultImage("")} className="text-xs text-muted-foreground hover:text-loss">Remove</button>}
+            </div>
           </div>
           <div>
             <Label>Notes</Label>

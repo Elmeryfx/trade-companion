@@ -84,6 +84,7 @@ const TradesDB = () => {
                 <th className="p-3 text-left text-muted-foreground font-medium">Date</th>
                 <th className="p-3 text-left text-muted-foreground font-medium">Position</th>
                 <th className="p-3 text-left text-muted-foreground font-medium">R:R</th>
+                <th className="p-3 text-left text-muted-foreground font-medium">Pips</th>
                 <th className="p-3 text-left text-muted-foreground font-medium">Strategy</th>
                 <th className="p-3 text-left text-muted-foreground font-medium">P&L</th>
                 <th className="p-3 text-left text-muted-foreground font-medium">TP1</th>
@@ -104,6 +105,7 @@ const TradesDB = () => {
                     <span className={t.position === "BUY" ? "text-profit" : "text-loss"}>{t.position}</span>
                   </td>
                   <td className="p-3">{t.rr}</td>
+                  <td className="p-3">{t.pips || 0}</td>
                   <td className="p-3">{t.strategy}</td>
                   <td className={`p-3 font-medium ${t.pnl >= 0 ? "text-profit" : "text-loss"}`}>${t.pnl.toFixed(2)}</td>
                   <td className="p-3">{t.tp1Hit ? "✓" : "—"}</td>

@@ -7,6 +7,7 @@ export interface Trade {
   id: string;
   position: Position;
   rr: number;
+  pips: number;
   pnl: number;
   tp1Hit: boolean;
   marketCondition: MarketCondition;
