@@ -3,6 +3,7 @@ import { TradeEntryDialog } from "@/components/TradeEntryDialog";
 import { StatsCards } from "@/components/StatsCards";
 import { TradeCalendar } from "@/components/TradeCalendar";
 import { DailyPerformanceChart } from "@/components/DailyPerformanceChart";
+import { MonthlyPerformanceChart } from "@/components/MonthlyPerformanceChart";
 
 const Dashboard = () => {
   const { trades } = useTrades();
@@ -10,19 +11,16 @@ const Dashboard = () => {
   return (
     <div className="p-6 space-y-6">
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-6">
-        {/* Quick Actions */}
-        <div className="rounded-lg border border-border p-5 transition-all duration-300 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5">
-          <h3 className="font-bold text-foreground mb-4">Quick Actions</h3>
-          <TradeEntryDialog />
-        </div>
-        {/* Stats */}
+        <TradeEntryDialog />
         <StatsCards trades={trades} />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <DailyPerformanceChart trades={trades} />
-        <TradeCalendar trades={trades} />
+        <MonthlyPerformanceChart trades={trades} />
       </div>
+
+      <TradeCalendar trades={trades} />
     </div>
   );
 };
