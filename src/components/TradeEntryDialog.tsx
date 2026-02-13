@@ -14,6 +14,7 @@ export const TradeEntryDialog = () => {
   const [open, setOpen] = useState(false);
   const [position, setPosition] = useState<Position>("BUY");
   const [rr, setRr] = useState("");
+  const [pips, setPips] = useState("");
   const [pnl, setPnl] = useState("");
   const [tp1, setTp1] = useState(false);
   const [market, setMarket] = useState<MarketCondition>("BULLISH");
@@ -37,6 +38,7 @@ export const TradeEntryDialog = () => {
     addTrade({
       position,
       rr: parseFloat(rr),
+      pips: parseFloat(pips) || 0,
       pnl: parseFloat(pnl),
       tp1Hit: tp1,
       marketCondition: market,
@@ -48,7 +50,7 @@ export const TradeEntryDialog = () => {
       notes: notes || undefined,
     });
     setOpen(false);
-    setRr(""); setPnl(""); setTp1(false); setSetupImage(""); setResultImage(""); setNotes("");
+    setRr(""); setPips(""); setPnl(""); setTp1(false); setSetupImage(""); setResultImage(""); setNotes("");
   };
 
   return (
@@ -86,14 +88,18 @@ export const TradeEntryDialog = () => {
               </Select>
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-3 gap-4">
             <div>
               <Label>R:R</Label>
               <Input type="number" step="0.1" value={rr} onChange={(e) => setRr(e.target.value)} placeholder="e.g. 2.5" />
             </div>
             <div>
+              <Label>Pips</Label>
+              <Input type="number" step="0.1" value={pips} onChange={(e) => setPips(e.target.value)} placeholder="e.g. 50" />
+            </div>
+            <div>
               <Label>P&L ($)</Label>
-              <Input type="number" value={pnl} onChange={(e) => setPnl(e.target.value)} placeholder="e.g. 500 or -100" />
+              <Input type="number" value={pnl} onChange={(e) => setPnl(e.target.value)} placeholder="e.g. 500" />
             </div>
           </div>
           <div>
