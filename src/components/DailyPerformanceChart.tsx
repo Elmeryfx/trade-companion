@@ -42,11 +42,11 @@ export const DailyPerformanceChart = ({ trades }: { trades: Trade[] }) => {
       </div>
       <ResponsiveContainer width="100%" height={200}>
         <BarChart data={data}>
-          <XAxis dataKey="name" tick={{ fill: "hsl(270,10%,55%)", fontSize: 12 }} axisLine={false} tickLine={false} />
-          <YAxis tick={{ fill: "hsl(270,10%,55%)", fontSize: 12 }} axisLine={false} tickLine={false} />
+          <XAxis dataKey="name" tick={{ fill: "hsl(0,0%,45%)", fontSize: 12 }} axisLine={false} tickLine={false} />
+          <YAxis tick={{ fill: "hsl(0,0%,45%)", fontSize: 12 }} axisLine={false} tickLine={false} />
           <Tooltip
-            contentStyle={{ backgroundColor: "hsl(272,18%,13%)", border: "1px solid hsl(275,25%,22%)", borderRadius: 8 }}
-            labelStyle={{ color: "hsl(270,10%,90%)" }}
+            contentStyle={{ backgroundColor: "hsl(0,0%,12%)", border: "1px solid hsl(0,0%,15%)", borderRadius: 8 }}
+            labelStyle={{ color: "hsl(0,0%,90%)" }}
           />
           <Bar dataKey="pnl" radius={[4, 4, 0, 0]}>
             {data.map((entry, i) => (

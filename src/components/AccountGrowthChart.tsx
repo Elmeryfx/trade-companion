@@ -12,14 +12,14 @@ export const AccountGrowthChart = ({ trades }: { trades: Trade[] }) => {
         <AreaChart data={data}>
           <defs>
             <linearGradient id="growthGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="hsl(275,39%,53%)" stopOpacity={0.4} />
-              <stop offset="95%" stopColor="hsl(275,39%,53%)" stopOpacity={0} />
+              <stop offset="5%" stopColor="hsl(163,100%,39%)" stopOpacity={0.4} />
+              <stop offset="95%" stopColor="hsl(163,100%,39%)" stopOpacity={0} />
             </linearGradient>
           </defs>
-          <XAxis dataKey="date" tick={{ fill: "hsl(270,10%,55%)", fontSize: 11 }} axisLine={false} tickLine={false} />
-          <YAxis tick={{ fill: "hsl(270,10%,55%)", fontSize: 11 }} axisLine={false} tickLine={false} />
-          <Tooltip contentStyle={{ backgroundColor: "hsl(272,18%,13%)", border: "1px solid hsl(275,25%,22%)", borderRadius: 8 }} />
-          <Area type="monotone" dataKey="balance" stroke="hsl(275,39%,53%)" fill="url(#growthGrad)" strokeWidth={2} />
+          <XAxis dataKey="date" tick={{ fill: "hsl(0,0%,45%)", fontSize: 11 }} axisLine={false} tickLine={false} />
+          <YAxis tick={{ fill: "hsl(0,0%,45%)", fontSize: 11 }} axisLine={false} tickLine={false} />
+          <Tooltip contentStyle={{ backgroundColor: "hsl(0,0%,12%)", border: "1px solid hsl(0,0%,15%)", borderRadius: 8 }} />
+          <Area type="monotone" dataKey="balance" stroke="hsl(163,100%,39%)" fill="url(#growthGrad)" strokeWidth={2} />
         </AreaChart>
       </ResponsiveContainer>
     </div>

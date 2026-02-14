@@ -1,9 +1,10 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { Trade } from "@/types/trade";
+import { useProfile } from "@/context/ProfileContext";
 
 interface TradeContextType {
   trades: Trade[];
-  addTrade: (trade: Omit<Trade, "id">) => void;
+  addTrade: (trade: Omit<Trade, "id" | "profileId">) => void;
   updateTrade: (trade: Trade) => void;
   deleteTrade: (id: string) => void;
   exportTrades: () => void;
@@ -13,25 +14,52 @@ interface TradeContextType {
 const TradeContext = createContext<TradeContextType | undefined>(undefined);
 
 export const TradeProvider = ({ children }: { children: ReactNode }) => {
-  const [trades, setTrades] = useState<Trade[]>(() => {
+  const { activeProfile } = useProfile();
+
+  const [allTrades, setAllTrades] = useState<Trade[]>(() => {
     const saved = localStorage.getItem("trades");
-    return saved ? JSON.parse(saved) : [];
+    if (!saved) return [];
+    const parsed = JSON.parse(saved) as any[];
+    return parsed.map((t) => ({
+      ...t,
+      tp1: t.tp1 ?? t.tp1Hit ?? false,
+      tp2: t.tp2 ?? false,
+      tp3: t.tp3 ?? false,
+      pips: t.pips ?? 0,
+      profileId: t.profileId || "",
+    }));
   });
 
   useEffect(() => {
-    localStorage.setItem("trades", JSON.stringify(trades));
-  }, [trades]);
+    localStorage.setItem("trades", JSON.stringify(allTrades));
+  }, [allTrades]);
 
-  const addTrade = (trade: Omit<Trade, "id">) => {
-    setTrades((prev) => [...prev, { ...trade, id: crypto.randomUUID() }]);
+  // Assign orphan trades to active profile
+  useEffect(() => {
+    if (activeProfile) {
+      setAllTrades((prev) => {
+        const hasOrphans = prev.some((t) => !t.profileId);
+        if (hasOrphans) {
+          return prev.map((t) => (t.profileId ? t : { ...t, profileId: activeProfile.id }));
+        }
+        return prev;
+      });
+    }
+  }, [activeProfile?.id]);
+
+  const trades = allTrades.filter((t) => t.profileId === activeProfile?.id);
+
+  const addTrade = (trade: Omit<Trade, "id" | "profileId">) => {
+    if (!activeProfile) return;
+    setAllTrades((prev) => [...prev, { ...trade, id: crypto.randomUUID(), profileId: activeProfile.id }]);
   };
 
   const updateTrade = (trade: Trade) => {
-    setTrades((prev) => prev.map((t) => (t.id === trade.id ? trade : t)));
+    setAllTrades((prev) => prev.map((t) => (t.id === trade.id ? trade : t)));
   };
 
   const deleteTrade = (id: string) => {
-    setTrades((prev) => prev.filter((t) => t.id !== id));
+    setAllTrades((prev) => prev.filter((t) => t.id !== id));
   };
 
   const exportTrades = () => {
@@ -39,7 +67,7 @@ export const TradeProvider = ({ children }: { children: ReactNode }) => {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `trades-${new Date().toISOString().split("T")[0]}.json`;
+    a.download = `trade (${activeProfile?.name || "unknown"}).json`;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -48,9 +76,19 @@ export const TradeProvider = ({ children }: { children: ReactNode }) => {
     const reader = new FileReader();
     reader.onload = (e) => {
       try {
-        const imported = JSON.parse(e.target?.result as string) as Trade[];
-        setTrades((prev) => [...prev, ...imported]);
-      } catch { /* invalid file */ }
+        const imported = JSON.parse(e.target?.result as string) as any[];
+        const withProfile = imported.map((t) => ({
+          ...t,
+          profileId: activeProfile?.id || "",
+          tp1: t.tp1 ?? t.tp1Hit ?? false,
+          tp2: t.tp2 ?? false,
+          tp3: t.tp3 ?? false,
+          pips: t.pips ?? 0,
+        }));
+        setAllTrades((prev) => [...prev, ...withProfile]);
+      } catch {
+        /* invalid file */
+      }
     };
     reader.readAsText(file);
   };
