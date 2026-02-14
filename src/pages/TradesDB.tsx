@@ -1,4 +1,5 @@
 import { useTrades } from "@/context/TradeContext";
+import { useProfile } from "@/context/ProfileContext";
 import { useState, useRef } from "react";
 import { Trash2, Download, Upload, Pencil } from "lucide-react";
 import { Trade } from "@/types/trade";
@@ -9,7 +10,7 @@ import {
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
-type Filter = "all" | "win" | "lose";
+type Filter = "all" | "win" | "lose" | "be";
 
 const formatDate = (dateStr: string) => {
   const [y, m, d] = dateStr.split("-");
@@ -18,6 +19,7 @@ const formatDate = (dateStr: string) => {
 
 const TradesDB = () => {
   const { trades, deleteTrade, updateTrade, exportTrades, importTrades } = useTrades();
+  const { activeProfile } = useProfile();
   const [filter, setFilter] = useState<Filter>("all");
   const fileRef = useRef<HTMLInputElement>(null);
   const [previewImg, setPreviewImg] = useState<string | null>(null);
@@ -27,6 +29,7 @@ const TradesDB = () => {
   const filtered = [...trades].reverse().filter((t) => {
     if (filter === "win") return t.result === "WIN";
     if (filter === "lose") return t.result === "LOSS";
+    if (filter === "be") return t.result === "BE";
     return true;
   });
 
@@ -34,12 +37,21 @@ const TradesDB = () => {
     { label: "All", value: "all" },
     { label: "Win", value: "win" },
     { label: "Lose", value: "lose" },
+    { label: "BE", value: "be" },
   ];
+
+  const tpLevels = activeProfile?.tpLevels || { tp1: true, tp2: false, tp3: false };
 
   const handleImport = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) importTrades(file);
     if (fileRef.current) fileRef.current.value = "";
+  };
+
+  const resultBadge = (result: string) => {
+    if (result === "WIN") return "bg-primary/20 text-profit";
+    if (result === "LOSS") return "bg-destructive/20 text-loss";
+    return "bg-secondary text-muted-foreground";
   };
 
   return (
@@ -87,7 +99,9 @@ const TradesDB = () => {
                 <th className="p-3 text-left text-muted-foreground font-medium">Pips</th>
                 <th className="p-3 text-left text-muted-foreground font-medium">Strategy</th>
                 <th className="p-3 text-left text-muted-foreground font-medium">P&L</th>
-                <th className="p-3 text-left text-muted-foreground font-medium">TP1</th>
+                {tpLevels.tp1 && <th className="p-3 text-left text-muted-foreground font-medium">TP 1</th>}
+                {tpLevels.tp2 && <th className="p-3 text-left text-muted-foreground font-medium">TP 2</th>}
+                {tpLevels.tp3 && <th className="p-3 text-left text-muted-foreground font-medium">TP 3</th>}
                 <th className="p-3 text-left text-muted-foreground font-medium">Result</th>
                 <th className="p-3 text-left text-muted-foreground font-medium">Market</th>
                 <th className="p-3 text-left text-muted-foreground font-medium">Notes</th>
@@ -108,9 +122,11 @@ const TradesDB = () => {
                   <td className="p-3">{t.pips || 0}</td>
                   <td className="p-3">{t.strategy}</td>
                   <td className={`p-3 font-medium ${t.pnl >= 0 ? "text-profit" : "text-loss"}`}>${t.pnl.toFixed(2)}</td>
-                  <td className="p-3">{t.tp1Hit ? "✓" : "—"}</td>
+                  {tpLevels.tp1 && <td className="p-3">{t.tp1 ? "✓" : "—"}</td>}
+                  {tpLevels.tp2 && <td className="p-3">{t.tp2 ? "✓" : "—"}</td>}
+                  {tpLevels.tp3 && <td className="p-3">{t.tp3 ? "✓" : "—"}</td>}
                   <td className="p-3">
-                    <span className={`px-2 py-0.5 rounded text-xs font-medium ${t.result === "WIN" ? "bg-primary/20 text-profit" : "bg-destructive/20 text-loss"}`}>
+                    <span className={`px-2 py-0.5 rounded text-xs font-medium ${resultBadge(t.result)}`}>
                       {t.result}
                     </span>
                   </td>

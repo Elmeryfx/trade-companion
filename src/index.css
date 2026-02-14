@@ -4,47 +4,47 @@
 
 @layer base {
   :root {
-    --background: 0 0% 0%;
-    --foreground: 270 10% 90%;
+    --background: 0 0% 2%;
+    --foreground: 0 0% 90%;
 
-    --card: 272 18% 13%;
-    --card-foreground: 270 10% 90%;
+    --card: 0 0% 12%;
+    --card-foreground: 0 0% 90%;
 
-    --popover: 272 18% 13%;
-    --popover-foreground: 270 10% 90%;
+    --popover: 0 0% 12%;
+    --popover-foreground: 0 0% 90%;
 
-    --primary: 275 39% 53%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 163 100% 39%;
+    --primary-foreground: 0 0% 2%;
 
-    --secondary: 272 25% 19%;
-    --secondary-foreground: 270 10% 90%;
+    --secondary: 0 0% 8%;
+    --secondary-foreground: 0 0% 90%;
 
-    --muted: 272 25% 19%;
-    --muted-foreground: 270 10% 55%;
+    --muted: 0 0% 8%;
+    --muted-foreground: 0 0% 45%;
 
-    --accent: 275 30% 22%;
-    --accent-foreground: 270 10% 90%;
+    --accent: 163 40% 12%;
+    --accent-foreground: 0 0% 90%;
 
     --destructive: 0 72% 51%;
-    --destructive-foreground: 270 10% 90%;
+    --destructive-foreground: 0 0% 90%;
 
-    --border: 275 25% 22%;
-    --input: 275 25% 22%;
-    --ring: 275 39% 53%;
+    --border: 0 0% 15%;
+    --input: 0 0% 15%;
+    --ring: 163 100% 39%;
 
     --radius: 0.5rem;
 
     --profit: 145 70% 45%;
     --loss: 0 72% 55%;
 
-    --sidebar-background: 272 18% 13%;
-    --sidebar-foreground: 270 10% 90%;
-    --sidebar-primary: 275 39% 53%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 272 25% 19%;
-    --sidebar-accent-foreground: 270 10% 90%;
-    --sidebar-border: 275 25% 22%;
-    --sidebar-ring: 275 39% 53%;
+    --sidebar-background: 0 0% 12%;
+    --sidebar-foreground: 0 0% 90%;
+    --sidebar-primary: 163 100% 39%;
+    --sidebar-primary-foreground: 0 0% 2%;
+    --sidebar-accent: 0 0% 8%;
+    --sidebar-accent-foreground: 0 0% 90%;
+    --sidebar-border: 0 0% 15%;
+    --sidebar-ring: 163 100% 39%;
   }
 }
 
@@ -56,8 +56,8 @@
   body {
     @apply bg-background text-foreground;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    background-image: radial-gradient(ellipse at 20% 50%, hsl(275 39% 15% / 0.4) 0%, transparent 60%),
-                      radial-gradient(ellipse at 80% 20%, hsl(275 30% 12% / 0.3) 0%, transparent 50%);
+    background-image: radial-gradient(ellipse at 20% 50%, hsl(163 100% 15% / 0.15) 0%, transparent 60%),
+                      radial-gradient(ellipse at 80% 20%, hsl(163 40% 10% / 0.1) 0%, transparent 50%);
     background-attachment: fixed;
   }
 }

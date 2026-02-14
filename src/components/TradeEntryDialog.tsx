@@ -6,20 +6,24 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useTrades } from "@/context/TradeContext";
-import { Position, MarketCondition, TradeResult, Strategy } from "@/types/trade";
+import { useProfile } from "@/context/ProfileContext";
+import { Position, MarketCondition, TradeResult } from "@/types/trade";
 import { Plus } from "lucide-react";
 
 export const TradeEntryDialog = () => {
   const { addTrade } = useTrades();
+  const { activeProfile } = useProfile();
   const [open, setOpen] = useState(false);
   const [position, setPosition] = useState<Position>("BUY");
   const [rr, setRr] = useState("");
   const [pips, setPips] = useState("");
   const [pnl, setPnl] = useState("");
   const [tp1, setTp1] = useState(false);
+  const [tp2, setTp2] = useState(false);
+  const [tp3, setTp3] = useState(false);
   const [market, setMarket] = useState<MarketCondition>("BULLISH");
   const [result, setResult] = useState<TradeResult>("WIN");
-  const [strategy, setStrategy] = useState<Strategy>("FVG");
+  const [strategy, setStrategy] = useState(activeProfile?.strategies[0] || "");
   const [setupImage, setSetupImage] = useState<string>("");
   const [resultImage, setResultImage] = useState<string>("");
   const [notes, setNotes] = useState("");
@@ -34,13 +38,15 @@ export const TradeEntryDialog = () => {
   };
 
   const handleSubmit = () => {
-    if (!rr || !pnl) return;
+    if (!rr || !pnl || !strategy) return;
     addTrade({
       position,
       rr: parseFloat(rr),
       pips: parseFloat(pips) || 0,
       pnl: parseFloat(pnl),
-      tp1Hit: tp1,
+      tp1,
+      tp2,
+      tp3,
       marketCondition: market,
       result,
       strategy,
@@ -50,8 +56,11 @@ export const TradeEntryDialog = () => {
       notes: notes || undefined,
     });
     setOpen(false);
-    setRr(""); setPips(""); setPnl(""); setTp1(false); setSetupImage(""); setResultImage(""); setNotes("");
+    setRr(""); setPips(""); setPnl(""); setTp1(false); setTp2(false); setTp3(false);
+    setSetupImage(""); setResultImage(""); setNotes("");
   };
+
+  const tpLevels = activeProfile?.tpLevels || { tp1: true, tp2: false, tp3: false };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -84,6 +93,7 @@ export const TradeEntryDialog = () => {
                 <SelectContent>
                   <SelectItem value="WIN">WIN</SelectItem>
                   <SelectItem value="LOSS">LOSS</SelectItem>
+                  <SelectItem value="BE">BE</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -104,13 +114,12 @@ export const TradeEntryDialog = () => {
           </div>
           <div>
             <Label>Strategy</Label>
-            <Select value={strategy} onValueChange={(v) => setStrategy(v as Strategy)}>
-              <SelectTrigger><SelectValue /></SelectTrigger>
+            <Select value={strategy} onValueChange={setStrategy}>
+              <SelectTrigger><SelectValue placeholder="Select strategy" /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="FVG">FVG</SelectItem>
-                <SelectItem value="REVERSAL">Reversal</SelectItem>
-                <SelectItem value="TRENDLINE">Trendline</SelectItem>
-                <SelectItem value="CONTINUATION">Continuation</SelectItem>
+                {(activeProfile?.strategies || []).map((s) => (
+                  <SelectItem key={s} value={s}>{s}</SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
@@ -125,9 +134,25 @@ export const TradeEntryDialog = () => {
               </SelectContent>
             </Select>
           </div>
-          <div className="flex items-center gap-2">
-            <Checkbox checked={tp1} onCheckedChange={(c) => setTp1(!!c)} id="tp1" />
-            <Label htmlFor="tp1">TP 1 Hit</Label>
+          <div className="flex items-center gap-4">
+            {tpLevels.tp1 && (
+              <div className="flex items-center gap-2">
+                <Checkbox checked={tp1} onCheckedChange={(c) => setTp1(!!c)} id="tp1" />
+                <Label htmlFor="tp1">TP 1</Label>
+              </div>
+            )}
+            {tpLevels.tp2 && (
+              <div className="flex items-center gap-2">
+                <Checkbox checked={tp2} onCheckedChange={(c) => setTp2(!!c)} id="tp2" />
+                <Label htmlFor="tp2">TP 2</Label>
+              </div>
+            )}
+            {tpLevels.tp3 && (
+              <div className="flex items-center gap-2">
+                <Checkbox checked={tp3} onCheckedChange={(c) => setTp3(!!c)} id="tp3" />
+                <Label htmlFor="tp3">TP 3</Label>
+              </div>
+            )}
           </div>
           <div>
             <Label>Setup Image (Before)</Label>
@@ -142,11 +167,11 @@ export const TradeEntryDialog = () => {
             <textarea
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
-              placeholder="Catatan tentang trade ini..."
+              placeholder="Notes about this trade..."
               className="flex min-h-[60px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
             />
           </div>
-          <Button onClick={handleSubmit} className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
+          <Button onClick={handleSubmit} className="w-full">
             Submit Trade
           </Button>
         </div>

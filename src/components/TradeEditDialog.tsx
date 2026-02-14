@@ -5,7 +5,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Trade, Position, MarketCondition, TradeResult, Strategy } from "@/types/trade";
+import { useProfile } from "@/context/ProfileContext";
+import { Trade, Position, MarketCondition, TradeResult } from "@/types/trade";
 import { ImagePlus } from "lucide-react";
 
 interface Props {
@@ -16,14 +17,17 @@ interface Props {
 }
 
 export const TradeEditDialog = ({ trade, open, onOpenChange, onSave }: Props) => {
+  const { activeProfile } = useProfile();
   const [position, setPosition] = useState<Position>("BUY");
   const [rr, setRr] = useState("");
   const [pips, setPips] = useState("");
   const [pnl, setPnl] = useState("");
   const [tp1, setTp1] = useState(false);
+  const [tp2, setTp2] = useState(false);
+  const [tp3, setTp3] = useState(false);
   const [market, setMarket] = useState<MarketCondition>("BULLISH");
   const [result, setResult] = useState<TradeResult>("WIN");
-  const [strategy, setStrategy] = useState<Strategy>("FVG");
+  const [strategy, setStrategy] = useState("");
   const [notes, setNotes] = useState("");
   const [date, setDate] = useState("");
   const [setupImage, setSetupImage] = useState("");
@@ -35,7 +39,9 @@ export const TradeEditDialog = ({ trade, open, onOpenChange, onSave }: Props) =>
       setRr(String(trade.rr));
       setPips(String(trade.pips || 0));
       setPnl(String(trade.pnl));
-      setTp1(trade.tp1Hit);
+      setTp1(!!trade.tp1);
+      setTp2(!!trade.tp2);
+      setTp3(!!trade.tp3);
       setMarket(trade.marketCondition);
       setResult(trade.result);
       setStrategy(trade.strategy);
@@ -54,7 +60,9 @@ export const TradeEditDialog = ({ trade, open, onOpenChange, onSave }: Props) =>
       rr: parseFloat(rr),
       pips: parseFloat(pips) || 0,
       pnl: parseFloat(pnl),
-      tp1Hit: tp1,
+      tp1,
+      tp2,
+      tp3,
       marketCondition: market,
       result,
       strategy,
@@ -65,6 +73,8 @@ export const TradeEditDialog = ({ trade, open, onOpenChange, onSave }: Props) =>
     });
     onOpenChange(false);
   };
+
+  const tpLevels = activeProfile?.tpLevels || { tp1: true, tp2: false, tp3: false };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -95,6 +105,7 @@ export const TradeEditDialog = ({ trade, open, onOpenChange, onSave }: Props) =>
                 <SelectContent>
                   <SelectItem value="WIN">WIN</SelectItem>
                   <SelectItem value="LOSS">LOSS</SelectItem>
+                  <SelectItem value="BE">BE</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -115,13 +126,12 @@ export const TradeEditDialog = ({ trade, open, onOpenChange, onSave }: Props) =>
           </div>
           <div>
             <Label>Strategy</Label>
-            <Select value={strategy} onValueChange={(v) => setStrategy(v as Strategy)}>
+            <Select value={strategy} onValueChange={setStrategy}>
               <SelectTrigger><SelectValue /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="FVG">FVG</SelectItem>
-                <SelectItem value="REVERSAL">Reversal</SelectItem>
-                <SelectItem value="TRENDLINE">Trendline</SelectItem>
-                <SelectItem value="CONTINUATION">Continuation</SelectItem>
+                {(activeProfile?.strategies || []).map((s) => (
+                  <SelectItem key={s} value={s}>{s}</SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
@@ -136,9 +146,25 @@ export const TradeEditDialog = ({ trade, open, onOpenChange, onSave }: Props) =>
               </SelectContent>
             </Select>
           </div>
-          <div className="flex items-center gap-2">
-            <Checkbox checked={tp1} onCheckedChange={(c) => setTp1(!!c)} id="tp1-edit" />
-            <Label htmlFor="tp1-edit">TP 1 Hit</Label>
+          <div className="flex items-center gap-4">
+            {tpLevels.tp1 && (
+              <div className="flex items-center gap-2">
+                <Checkbox checked={tp1} onCheckedChange={(c) => setTp1(!!c)} id="tp1-edit" />
+                <Label htmlFor="tp1-edit">TP 1</Label>
+              </div>
+            )}
+            {tpLevels.tp2 && (
+              <div className="flex items-center gap-2">
+                <Checkbox checked={tp2} onCheckedChange={(c) => setTp2(!!c)} id="tp2-edit" />
+                <Label htmlFor="tp2-edit">TP 2</Label>
+              </div>
+            )}
+            {tpLevels.tp3 && (
+              <div className="flex items-center gap-2">
+                <Checkbox checked={tp3} onCheckedChange={(c) => setTp3(!!c)} id="tp3-edit" />
+                <Label htmlFor="tp3-edit">TP 3</Label>
+              </div>
+            )}
           </div>
           <div>
             <Label>Setup Image</Label>
@@ -176,7 +202,7 @@ export const TradeEditDialog = ({ trade, open, onOpenChange, onSave }: Props) =>
               className="flex min-h-[60px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
             />
           </div>
-          <Button onClick={handleSubmit} className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
+          <Button onClick={handleSubmit} className="w-full">
             Save Changes
           </Button>
         </div>
