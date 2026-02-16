@@ -11,6 +11,7 @@ import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { ThemeSettings } from "@/components/ThemeSettings";
 
 const Settings = () => {
   const { activeProfile, profiles, updateProfile, deleteProfile, setActiveProfileId } = useProfile();
@@ -183,6 +184,9 @@ const Settings = () => {
           )}
         </div>
       </div>
+
+      {/* Theme */}
+      <ThemeSettings />
 
       {/* TP Levels */}
       <div className="rounded-lg border border-border p-6 space-y-3">
