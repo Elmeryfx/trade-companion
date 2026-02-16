@@ -21,7 +21,7 @@ export const PROFIT_THEMES: Record<ProfitTheme, { label: string; gradient: strin
   "emerald-depth": { label: "Emerald Depth", gradient: "linear-gradient(90deg, #4A9B7F, #0A3431)", colors: ["#4A9B7F", "#0A3431"] },
   "forest-machine": { label: "Forest Machine", gradient: "linear-gradient(90deg, #0B2C24, #247A4D)", colors: ["#0B2C24", "#247A4D"] },
   "jungle-code": { label: "Jungle Code", gradient: "linear-gradient(90deg, #46B83D, #111E0B)", colors: ["#46B83D", "#111E0B"] },
-  "lime": { label: "Lime", gradient: "linear-gradient(90deg, #1F1F1F, #040404)", colors: ["#1F1F1F", "#040404"] },
+  "lime": { label: "Lime", gradient: "linear-gradient(90deg, #00C896, #040404)", colors: ["#00C896", "#040404"] },
 };
 
 export const LOSS_THEMES: Record<LossTheme, { label: string; gradient: string; colors: [string, string] }> = {
