@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { ProfileProvider, useProfile } from "@/context/ProfileContext";
 import { TradeProvider } from "@/context/TradeContext";
 import { ThemeProvider } from "@/context/ThemeContext";
@@ -21,17 +21,20 @@ const queryClient = new QueryClient();
 
 const AppContent = () => {
   const { activeProfile } = useProfile();
+  const { pathname } = useLocation();
 
   if (!activeProfile) {
     return <ProfileSelect />;
   }
+
+  const isHome = pathname === "/";
 
   return (
     <TradeProvider>
       <div className="min-h-screen bg-background relative">
         <BackgroundEffects />
         <div className="relative z-10">
-        <AppNav />
+        {!isHome && <AppNav />}
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/analytics" element={<Analytics />} />
