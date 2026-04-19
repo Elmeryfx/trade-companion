@@ -64,31 +64,36 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   // Apply CSS variables based on theme
   useEffect(() => {
     const root = document.documentElement;
-    const [c1, c2] = baseInfo.colors;
-    const dark = isDark(c1);
-    const bg = dark ? c1 : c2;
-    const bgAlt = dark ? c2 : c1;
-    
-    // Determine foreground based on average brightness
-    const avgBright = isDark(blendColors(c1, c2, 0.5));
-    const fg = avgBright ? "0 0% 90%" : "0 0% 10%";
-    const mutedFg = avgBright ? "0 0% 55%" : "0 0% 40%";
-    
-    root.style.setProperty("--background", hexToHSL(bg));
+    const [bgHex, accentHex] = baseInfo.colors;
+    const bgHSL = hexToHSL(bgHex);
+    const accentHSL = hexToHSL(accentHex);
+    const dark = isDark(bgHex);
+    const fg = dark ? "0 0% 90%" : "0 0% 10%";
+    const mutedFg = dark ? "0 0% 55%" : "0 0% 40%";
+
+    // Solid base — derive surfaces by lifting lightness slightly off the background
+    const lift = (pct: number) => {
+      const [h, s, lStr] = bgHSL.split(" ");
+      const l = parseFloat(lStr);
+      const newL = dark ? Math.min(l + pct, 100) : Math.max(l - pct, 0);
+      return `${h} ${s} ${newL}%`;
+    };
+
+    root.style.setProperty("--background", bgHSL);
     root.style.setProperty("--foreground", fg);
-    root.style.setProperty("--card", hexToHSL(blendColors(c1, c2, 0.6)));
+    root.style.setProperty("--card", lift(4));
     root.style.setProperty("--card-foreground", fg);
-    root.style.setProperty("--popover", hexToHSL(blendColors(c1, c2, 0.6)));
+    root.style.setProperty("--popover", lift(4));
     root.style.setProperty("--popover-foreground", fg);
-    root.style.setProperty("--secondary", hexToHSL(blendColors(c1, c2, 0.7)));
+    root.style.setProperty("--secondary", lift(6));
     root.style.setProperty("--secondary-foreground", fg);
-    root.style.setProperty("--muted", hexToHSL(blendColors(c1, c2, 0.7)));
+    root.style.setProperty("--muted", lift(6));
     root.style.setProperty("--muted-foreground", mutedFg);
-    root.style.setProperty("--accent", hexToHSL(blendColors(c1, c2, 0.5)));
-    root.style.setProperty("--accent-foreground", fg);
-    root.style.setProperty("--border", hexToHSL(blendColors(c1, c2, 0.4)));
-    root.style.setProperty("--input", hexToHSL(blendColors(c1, c2, 0.4)));
-    
+    root.style.setProperty("--accent", accentHSL);
+    root.style.setProperty("--accent-foreground", isDark(accentHex) ? "0 0% 90%" : "0 0% 10%");
+    root.style.setProperty("--border", lift(10));
+    root.style.setProperty("--input", lift(10));
+
     // Primary from profit theme first color
     const profitPrimary = profitInfo.colors[0];
     root.style.setProperty("--primary", hexToHSL(profitPrimary));
@@ -100,19 +105,19 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
     root.style.setProperty("--loss", hexToHSL(lossInfo.colors[0]));
 
     // Sidebar
-    root.style.setProperty("--sidebar-background", hexToHSL(blendColors(c1, c2, 0.7)));
+    root.style.setProperty("--sidebar-background", lift(4));
     root.style.setProperty("--sidebar-foreground", fg);
     root.style.setProperty("--sidebar-primary", hexToHSL(profitPrimary));
     root.style.setProperty("--sidebar-primary-foreground", isDark(profitPrimary) ? "0 0% 90%" : "0 0% 5%");
-    root.style.setProperty("--sidebar-accent", hexToHSL(blendColors(c1, c2, 0.5)));
+    root.style.setProperty("--sidebar-accent", lift(6));
     root.style.setProperty("--sidebar-accent-foreground", fg);
-    root.style.setProperty("--sidebar-border", hexToHSL(blendColors(c1, c2, 0.4)));
+    root.style.setProperty("--sidebar-border", lift(10));
     root.style.setProperty("--sidebar-ring", hexToHSL(profitPrimary));
 
-    // Set gradient for background
+    // Expose base colors
     root.style.setProperty("--base-gradient", baseInfo.gradient);
-    root.style.setProperty("--base-color-1", c1);
-    root.style.setProperty("--base-color-2", c2);
+    root.style.setProperty("--base-color-1", baseInfo.colors[0]);
+    root.style.setProperty("--base-color-2", baseInfo.colors[1]);
   }, [theme, baseInfo, profitInfo, lossInfo]);
 
   const value = useMemo(() => ({
