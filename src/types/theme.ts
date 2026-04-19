@@ -1,4 +1,4 @@
-export type BaseTheme = "cloud-alloy" | "skyfade" | "frosted-light" | "midnight-mist" | "citrus-shine" | "neon-dusk";
+export type BaseTheme = "onyx-mist" | "cloud-alloy" | "skyfade" | "frosted-light" | "midnight-mist" | "citrus-shine" | "neon-dusk";
 export type ProfitTheme = "emerald-depth" | "forest-machine" | "jungle-code" | "lime";
 export type LossTheme = "crimson-void" | "rust-furnace" | "wine-shadow";
 
@@ -9,6 +9,7 @@ export interface ThemeConfig {
 }
 
 export const BASE_THEMES: Record<BaseTheme, { label: string; gradient: string; colors: [string, string] }> = {
+  "onyx-mist": { label: "Onyx Mist", gradient: "linear-gradient(90deg, #0A0A0A, #D8DBE9)", colors: ["#0A0A0A", "#D8DBE9"] },
   "cloud-alloy": { label: "Cloud Alloy", gradient: "linear-gradient(90deg, #8399A2, #EEF2F3)", colors: ["#8399A2", "#EEF2F3"] },
   "skyfade": { label: "Skyfade", gradient: "linear-gradient(90deg, #727A9A, #D8DBE9)", colors: ["#727A9A", "#D8DBE9"] },
   "frosted-light": { label: "Frosted Light", gradient: "linear-gradient(90deg, #EBF4F5, #B5C6E0)", colors: ["#EBF4F5", "#B5C6E0"] },
@@ -31,7 +32,7 @@ export const LOSS_THEMES: Record<LossTheme, { label: string; gradient: string; c
 };
 
 export const DEFAULT_THEME: ThemeConfig = {
-  base: "neon-dusk",
+  base: "onyx-mist",
   profit: "emerald-depth",
   loss: "crimson-void",
 };
