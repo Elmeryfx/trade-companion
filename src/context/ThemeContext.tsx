@@ -49,7 +49,18 @@ function blendColors(c1: string, c2: string, weight = 0.5): string {
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const [theme, setTheme] = useState<ThemeConfig>(() => {
     const saved = localStorage.getItem("appTheme");
-    return saved ? JSON.parse(saved) : DEFAULT_THEME;
+    if (!saved) return DEFAULT_THEME;
+    try {
+      const parsed = JSON.parse(saved) as ThemeConfig;
+      // Migrate users from previous default ("neon-dusk") to new default ("onyx-mist")
+      if (parsed.base === "neon-dusk" && !localStorage.getItem("appThemeMigratedOnyx")) {
+        localStorage.setItem("appThemeMigratedOnyx", "1");
+        return { ...parsed, base: "onyx-mist" };
+      }
+      return parsed;
+    } catch {
+      return DEFAULT_THEME;
+    }
   });
 
   useEffect(() => {
