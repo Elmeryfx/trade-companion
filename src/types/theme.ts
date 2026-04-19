@@ -9,7 +9,7 @@ export interface ThemeConfig {
 }
 
 export const BASE_THEMES: Record<BaseTheme, { label: string; gradient: string; colors: [string, string] }> = {
-  "onyx-mist": { label: "Onyx Mist", gradient: "linear-gradient(90deg, #0A0A0A, #D8DBE9)", colors: ["#0A0A0A", "#D8DBE9"] },
+  "onyx-mist": { label: "Onyx Mist", gradient: "#0A0A0A", colors: ["#0A0A0A", "#D8DBE9"] },
 };
 
 export const PROFIT_THEMES: Record<ProfitTheme, { label: string; gradient: string; colors: [string, string] }> = {
