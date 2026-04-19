@@ -114,10 +114,10 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
     root.style.setProperty("--sidebar-border", lift(10));
     root.style.setProperty("--sidebar-ring", hexToHSL(profitPrimary));
 
-    // Set gradient for background
+    // Expose base colors
     root.style.setProperty("--base-gradient", baseInfo.gradient);
-    root.style.setProperty("--base-color-1", c1);
-    root.style.setProperty("--base-color-2", c2);
+    root.style.setProperty("--base-color-1", baseInfo.colors[0]);
+    root.style.setProperty("--base-color-2", baseInfo.colors[1]);
   }, [theme, baseInfo, profitInfo, lossInfo]);
 
   const value = useMemo(() => ({
