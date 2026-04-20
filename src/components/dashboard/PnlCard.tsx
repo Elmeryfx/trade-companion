@@ -1,21 +1,19 @@
 import { Trade } from "@/types/trade";
-import { getTotalPnl, formatCurrency } from "@/lib/analytics";
-import { DollarSign } from "lucide-react";
+import { getTotalPnl } from "@/lib/analytics";
+import { TrendingUp } from "lucide-react";
 
 export const PnlCard = ({ trades }: { trades: Trade[] }) => {
   const pnl = getTotalPnl(trades);
+  const formatted = pnl.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   return (
-    <div className="h-full rounded-lg border border-border p-4 flex flex-col justify-between bg-card/30">
+    <div className="h-full rounded-lg border border-border p-4 bg-card/30 flex flex-col justify-between">
       <div className="flex items-center justify-between">
-        <p className="text-xs uppercase tracking-wider text-muted-foreground font-medium">Total P&L</p>
-        <DollarSign className="h-4 w-4 text-primary/60" />
+        <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Total P&L</span>
+        <TrendingUp className={`h-3.5 w-3.5 ${pnl >= 0 ? "text-profit" : "text-loss"}`} />
       </div>
-      <div>
-        <p className={`text-3xl font-bold ${pnl >= 0 ? "text-profit" : "text-loss"}`}>
-          {formatCurrency(pnl)}
-        </p>
-        <p className="text-xs text-muted-foreground mt-1">{trades.length} trades</p>
-      </div>
+      <p className={`text-3xl font-bold tabular-nums ${pnl >= 0 ? "text-foreground" : "text-loss"}`}>
+        ${formatted}
+      </p>
     </div>
   );
 };

@@ -3,10 +3,10 @@ import { TradeCalendar } from "@/components/TradeCalendar";
 import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
 import { AccountHeader } from "@/components/dashboard/AccountHeader";
 import { PnlCard } from "@/components/dashboard/PnlCard";
-import { DayWinCard } from "@/components/dashboard/DayWinCard";
-import { PnlLineChart } from "@/components/dashboard/PnlLineChart";
+import { WinRateBar } from "@/components/dashboard/WinRateBar";
+import { TradingProtocols } from "@/components/dashboard/TradingProtocols";
+import { RRRatioCard } from "@/components/dashboard/RRRatioCard";
 import { StrategyAreaChart } from "@/components/dashboard/StrategyAreaChart";
-import { WinLossPie } from "@/components/dashboard/WinLossPie";
 import { RecentHistory } from "@/components/dashboard/RecentHistory";
 
 const Dashboard = () => {
@@ -16,13 +16,13 @@ const Dashboard = () => {
     <div
       className="p-4 gap-3 min-h-screen grid"
       style={{
-        gridTemplateColumns: "1fr 1.4fr 1.1fr 0.7fr 0.8fr",
-        gridTemplateRows: "0.5fr 0.8fr 0.7fr 2fr 1fr",
+        gridTemplateColumns: "0.9fr 1fr 1fr 1fr 0.9fr",
+        gridTemplateRows: "auto auto auto auto auto",
         gridTemplateAreas: `
           "sidebar header header header header"
-          "sidebar pnl linechart area area"
-          "sidebar daywin linechart area area"
-          "sidebar kalendar kalendar pie pie"
+          "sidebar pnl protocols protocols rr"
+          "sidebar wr  protocols protocols rr"
+          "sidebar equity equity calendar calendar"
           "sidebar history history history history"
         `,
       }}
@@ -36,20 +36,20 @@ const Dashboard = () => {
       <div style={{ gridArea: "pnl" }}>
         <PnlCard trades={trades} />
       </div>
-      <div style={{ gridArea: "daywin" }}>
-        <DayWinCard trades={trades} />
+      <div style={{ gridArea: "wr" }}>
+        <WinRateBar trades={trades} />
       </div>
-      <div style={{ gridArea: "linechart" }}>
-        <PnlLineChart trades={trades} />
+      <div style={{ gridArea: "protocols" }}>
+        <TradingProtocols />
       </div>
-      <div style={{ gridArea: "area" }}>
+      <div style={{ gridArea: "rr" }}>
+        <RRRatioCard trades={trades} />
+      </div>
+      <div style={{ gridArea: "equity" }} className="min-h-[360px]">
         <StrategyAreaChart trades={trades} />
       </div>
-      <div style={{ gridArea: "kalendar" }} className="min-h-0 overflow-hidden">
+      <div style={{ gridArea: "calendar" }} className="min-h-[360px] overflow-hidden">
         <TradeCalendar trades={trades} />
-      </div>
-      <div style={{ gridArea: "pie" }}>
-        <WinLossPie trades={trades} />
       </div>
       <div style={{ gridArea: "history" }}>
         <RecentHistory trades={trades} />
